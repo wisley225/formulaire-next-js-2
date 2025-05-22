@@ -1,103 +1,143 @@
+'use client'
+
 import Image from "next/image";
+import { useEffect,useState ,useRef } from "react";
+import gsap from "gsap";
+
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+const [indexActuel,setIndexActual]=useState(0)
+const [enAnimation,setAnimation]=useState(false)
+const ImageRef=useRef<HTMLImageElement>(null)
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+const imageUrl=[
+'photo1.jpg',
+'photo2.jpg',
+'photo3.jpg',
+'photo4.jpg',
+'photo5.jpg',
+'photo6.jpg',
+'photo7.jpg',
+'photo8.jpg',
+]
+
+const mettreAjour=(nouvelIndex:number)=>{
+
+if (enAnimation)return
+setAnimation(true)
+
+ imageUrl.forEach( (element,i )=>{
+
+  if (i===nouvelIndex && ImageRef.current){ {
+
+const ctx=gsap.context(()=>{
+
+gsap.fromTo(ImageRef.current,{
+transition:1,
+duration:4,
+opacity:1,
+onComplete:()=>setAnimation(false),
+},
+
+{
+
+
+onComplete:()=>setAnimation(false),
+},
+
+
+
+
+) 
+
+
+
+
+
+
+
+
+return () => ctx.revert();
+
+  })
+
+
+
+ return
+
+  }
+
+ }})
+}
+
+const Image_suivante=()=>{
+
+if (enAnimation)return
+setIndexActual(prev=>{
+const nouvelIndex=(prev+1)%imageUrl.length
+mettreAjour(nouvelIndex)
+
+return nouvelIndex
+})
+
+}
+
+useEffect( ()=>{
+  const interval = setInterval(() => {
+    Image_suivante()
+  }, 7000);
+
+  return () => clearInterval(interval);
+})
+  return (
+    <form className=" flex h-screen ">
+      <div  className=" w-7/12 relative">
+
+       <Image
+        src={ `/${imageUrl[indexActuel]}`}
+        alt="photo1"
+        fill
+        className="object-cover object-center "
+        ref={ImageRef}
+        />
+
+       </div>
+
+
+
+      <div className="w-5/12  justify-center items-center flex flex-col">
+  <p className=" mb-5  bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-purple-600 text-4xl font-bold">
+   <span>w</span>
+   <span>e</span>
+   <span>s</span>
+   <span>e</span>
+   <span>e</span>
+   <span>m</span>
+   <span>b</span>
+   <span>a</span>
+  </p>
+
+  <h1 className="font-bold text-xl mb-1"> connectez vous pour continuer</h1>
+<p className=" mb-5">vous n'avez pas de compte ? <a href="" className="text-blue-400">creer un compte</a></p>
+
+<div className=" flex flex-col w-96  mb-5 ">
+
+<label className=" text-lg mb-1" > Email</label>
+<input type="email" className=" h-15 rounded-lg pl-5 mb-5 border border-gray-400 bg-white " />
+
+
+
+<label htmlFor="" className=" text-lg mb-1" > Mot de passe</label>
+<input type="password" className=" h-15 rounded-lg pl-5  border border-gray-400 bg-white " />
+
+<div className=" my-2 flex justify-between  w-full "><div className=" flex   "><input type="radio"/><span className="">se souvenir de moi</span> </div>  <a href="" className="text-blue-400 ">Mot de passe oublié ?</a></div>
+    <button className=" border py-2 rounded-full text-xl text-white bg-blue-600 cursor-pointer hover:bg-blue-700  font-serif"> Se connecter</button>
+
+</div>
+
+
+       </div>
+
+    </form>
   );
 }
